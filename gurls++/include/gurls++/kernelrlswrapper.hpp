@@ -114,7 +114,16 @@ gMat2D<T>* KernelRLSWrapper<T>::eval(const gMat2D<T> &X)
         break;
     case KernelWrapper<T>::RBF:
         pred = new PredDual<T>();
-        this->opt->addOpt("predkernel", predkTrainTest.execute(X, empty, *(this->opt)));
+        try
+        {
+            this->opt->addOpt("predkernel", predkTrainTest.execute(X, empty, *(this->opt)));
+        }
+        catch (gException &e)
+        {
+            this->opt->removeOpt("predkernel", true);
+            this->opt->addOpt("predkernel", predkTrainTest.execute(X, empty, *(this->opt)));
+
+        }
     }
 
     OptMatrix<gMat2D<T> >* result = OptMatrix<gMat2D<T> >::dynacast(pred->execute(X, empty, *(this->opt)));
