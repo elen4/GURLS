@@ -33,17 +33,19 @@ elseif(BLAS_LAPACK_IMPLEMENTATION STREQUAL "ATLAS")
 
 elseif(BLAS_LAPACK_IMPLEMENTATION STREQUAL "OPENBLAS")
 
-    if(CMAKE_COMPILER_IS_GNUCC)
+    if (NOT GURLS_USE_EXTERNAL_BLAS_LAPACK)
+        if(CMAKE_COMPILER_IS_GNUCC)
             enable_language(Fortran)
-    endif()
-    set (OPENBLAS_IGNORE_HEADERS ON)
-    find_package(Openblas)
+        endif()
+        set (OPENBLAS_IGNORE_HEADERS ON)
+        find_package(Openblas)
 
-    set(BLAS_LAPACK_INCLUDE_DIRS ${Openblas_INCLUDE_DIRS})
-    set(BLAS_LAPACK_LIBRARY_DIRS )
-    set(BLAS_LAPACK_DEFINITIONS )
-    set(BLAS_LAPACK_LIBRARIES ${Openblas_LIBRARIES})
-    set(BLAS_LAPACK_FOUND ${Openblas_FOUND})
+        set(BLAS_LAPACK_INCLUDE_DIRS ${Openblas_INCLUDE_DIRS})
+        set(BLAS_LAPACK_LIBRARY_DIRS )
+        set(BLAS_LAPACK_DEFINITIONS )
+        set(BLAS_LAPACK_LIBRARIES ${Openblas_LIBRARIES})
+        set(BLAS_LAPACK_FOUND ${Openblas_FOUND})
+    endif()
 
 else()
 # includes case "NETLIB"
@@ -83,8 +85,10 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 option(Boost_USE_STATIC_LIBS "Link statically against boost libs" ON)
 
 #should not be needed #set(CMAKE_PREFIX_PATH $ENV{GURLSPP_ROOT} ${CMAKE_PREFIX_PATH})
-find_package( Boost ${BOOST_MINIMUM_VERSION} COMPONENTS serialization date_time filesystem unit_test_framework system signals REQUIRED)
-mark_as_advanced(Boost_DIR)
+if(NOT GURLS_USE_EXTERNAL_BOOST)
+    find_package( Boost ${BOOST_MINIMUM_VERSION} COMPONENTS serialization date_time filesystem unit_test_framework system signals REQUIRED)
+    mark_as_advanced(Boost_DIR)
+endif()
 
 if(MSVC)
     add_definitions(-DBOOST_ALL_NO_LIB)
@@ -100,7 +104,9 @@ endif()
 
 
 # HDF_5
-find_package(HDF5 COMPONENTS C)
+if (NOT GURLS_USE_EXTERNAL_HDF5)
+    find_package(HDF5 COMPONENTS C)
+endif()
 if (NOT HDF5_FOUND)
     option(GURLS_USE_EXTERNAL_HDF5 "build external project HDF5" OFF)
 endif()
