@@ -27,6 +27,8 @@ set(gurls_headers   include/gurls++/basearray.h
                     include/gurls++/gmat2d.h
                     include/gurls++/gmat2d.hpp
                     include/gurls++/gmath.h
+                    include/gurls++/gprwrapper.h
+                    include/gurls++/gprwrapper.hpp
                     include/gurls++/gurls.h
                     include/gurls++/gurls.hpp
                     include/gurls++/gvec.h
@@ -65,6 +67,8 @@ set(gurls_headers   include/gurls++/basearray.h
                     include/gurls++/predkernel.h
                     include/gurls++/predkerneltraintest.h
                     include/gurls++/primal.h
+                    include/gurls++/randfeatswrapper.h
+                    include/gurls++/randfeatswrapper.hpp
                     include/gurls++/rbfkernel.h
                     include/gurls++/recrlswrapper.h
                     include/gurls++/recrlswrapper.hpp
@@ -77,6 +81,8 @@ set(gurls_headers   include/gurls++/basearray.h
                     include/gurls++/rlsprimalrecinit.h
                     include/gurls++/rlsprimalrecupdate.h
                     include/gurls++/rlsprimalr.h
+                    include/gurls++/rlswrapper.h
+                    include/gurls++/rlswrapper.hpp
                     include/gurls++/rmse.h
                     include/gurls++/serialization.h
                     include/gurls++/siglam.h
@@ -118,14 +124,14 @@ if(GURLS_USE_EXTERNAL_BOOST)
 endif(GURLS_USE_EXTERNAL_BOOST)
 
 
-install(TARGETS ${GURLSLIBRARY} EXPORT Gurls++targets-install
+install(TARGETS ${GURLSLIBRARY} EXPORT Gurlstargets-install
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
 )
 
 install (FILES ${gurls_headers} DESTINATION include/gurls++)
-install(EXPORT Gurls++targets-install DESTINATION lib)
+install(EXPORT Gurlstargets-install DESTINATION lib)
 
 export(TARGETS gurls++ FILE ${gurls_BINARY_DIR}/Gurlstargets-buildtree.cmake)
 
@@ -187,3 +193,4 @@ if(GURLSPP_BUILD_DOC)
         message(WARNING "Doxygen documentation was enabled, but the Doxygen package was not found.")
     endif(Doxygen_FOUND)
 endif(GURLSPP_BUILD_DOC)
+

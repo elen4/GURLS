@@ -39,10 +39,10 @@
   * POSSIBILITY OF SUCH DAMAGE.
   */
 
-#ifndef GURLS_RLSWRAPPER_H
-#define GURLS_RLSWRAPPER_H
+#ifndef GURLS_RANDFEATSWRAPPER_H
+#define GURLS_RANDFEATSWRAPPER_H
 
-#include "gurls++/wrapper.h"
+#include "gurls++/rlswrapper.h"
 
 namespace gurls
 {
@@ -55,7 +55,7 @@ namespace gurls
   *
   */
 template<typename T>
-class RLSWrapper: public GurlsWrapper<T>
+class RandomFeaturesWrapper: public RLSWrapper<T>
 {
 public:
     /**
@@ -63,7 +63,12 @@ public:
       *
       * \param name Name of the option's structure that will be initialized
       */
-    RLSWrapper(const std::string& name);
+    RandomFeaturesWrapper(const std::string& name);
+
+    /**
+      * Destructor
+      */
+    ~RandomFeaturesWrapper();
 
     /**
       * Initial parameter selection and training
@@ -73,17 +78,27 @@ public:
       */
     void train(const gMat2D<T> &X, const gMat2D<T> &y);
 
+
     /**
       * Estimates label for an input matrix
       *
       * \param[in] X Input matrix
       * \returns Matrix of predicted labels
       */
-    gMat2D<T>* eval(const gMat2D<T> &X);
+    gMat2D<T> *eval(const gMat2D<T> &X);
+
+    /**
+      *
+      * \param value
+      */
+    void setNRandFeats(unsigned long value);
+
+protected:
+    gMat2D<T> *W;
 };
 
 }
 
-#include "rlswrapper.hpp"
+#include "randfeatswrapper.hpp"
 
-#endif //GURLS_RLSWRAPPER_H
+#endif //GURLS_RANDFEATSWRAPPER_H
