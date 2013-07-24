@@ -17,18 +17,20 @@ if (MSVC)
 else()
     ExternalProject_add(buildOpenblas
         GIT_REPOSITORY "git://github.com/xianyi/OpenBLAS.git"
-        GIT_TAG "v0.2.6"
+        GIT_TAG "v0.2.7"
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
         SOURCE_DIR  ${EXTERNAL_PREFIX}/src/openblas
         INSTALL_DIR ${EXTERNAL_PREFIX}/
         CONFIGURE_COMMAND ""
-        PATCH_COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/Makefile.install.openblas" "<SOURCE_DIR>/Makefile.install"
+        PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/external/Makefile.install.openblas" "<SOURCE_DIR>/Makefile.install"
         BUILD_COMMAND NO_SHARED=1 ${CMAKE_MAKE_PROGRAM} libs netlib
         INSTALL_COMMAND NO_SHARED=1 ${CMAKE_MAKE_PROGRAM} install PREFIX=<INSTALL_DIR>
     )
 
     set(Openblas_FOUND TRUE)
+    set(Openblas_LIBRARIES ${EXTERNAL_PREFIX}/lib/libopenblas.a pthread gfortran)
+    set(Openblas_INCLUDE_DIRS ${EXTERNAL_PREFIX}/include)
     set_target_properties(buildOpenblas PROPERTIES EXCLUDE_FROM_ALL 1)
 endif()
 

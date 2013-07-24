@@ -66,7 +66,7 @@ if(BGURLSPP_USE_MPI_IO)
     set(export_definitions ${export_definitions} -DUSE_MPIIO)
 endif(BGURLSPP_USE_MPI_IO)
 
-add_library(${GURLSLIBRARY} ${GURLS_LIB_LINK} ${bgurls_headers} ${bgurls_sources} ${gurls_sources})
+add_library(${GURLSLIBRARY} ${bgurls_headers} ${bgurls_sources} ${gurls_sources})
 target_link_libraries(${GURLSLIBRARY} ${MPI_CXX_LIBRARIES} ${HDF5_LIBRARIES} ${ZLIB_LIBRARIES} ${BLAS_LAPACK_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_SIGNALS_LIBRARY})
 set(BGurls++_LIBRARY ${GURLSLIBRARY}  CACHE INTERNAL "")
 set(BGurls++_LIBRARIES ${GURLSLIBRARY} ${MPI_CXX_LIBRARIES} ${HDF5_LIBRARIES} ${ZLIB_LIBRARIES} ${BLAS_LAPACK_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_SIGNALS_LIBRARY}) #to compile executables - maybe missing dependencies though

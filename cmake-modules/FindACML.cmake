@@ -9,10 +9,10 @@
 #  ACML_LIBRARIES - uncached list of libraries (using full path name) to
 #    link against to use ACML
 
-set(ACML_ROOT "$ENV{ACML_DIR}" CACHE PATH "Path to ACML")
+set(ACML_ROOT "$ENV{ACML_DIR}")
 
 set(ACML_LIB_PATH ${ACML_ROOT}/lib/)
-set(ACML_STATIC OFF CACHE BOOL "Link statically against ACML libraries")
+option(ACML_STATIC "Link statically against ACML libraries" OFF)
 
 find_path(ACML_INCLUDE_DIRS acml.h ${ACML_ROOT}/include )
 
@@ -24,28 +24,13 @@ else(${ACML_ROOT} MATCHES "^.*mp.*$")
     set(ACML_MULTITHREADING "")
 endif(${ACML_ROOT} MATCHES "^.*mp.*$")
 
-if(ACML_STATIC)
-        set(SUFFIX "")
-else(ACML_STATIC)
-    if(MSVC)
-        set(SUFFIX "_dll")
-    else(MSVC)
-        set(SUFFIX "")
-    endif(MSVC)
-endif(ACML_STATIC)
-  
+if(MSVC AND NOT ACML_STATIC)
+    set(SUFFIX "_dll")
+else()
+    set(SUFFIX "")
+endif()
+
 find_library(ACML_LIBRARIES libacml${ACML_MULTITHREADING}${SUFFIX} ${ACML_LIB_PATH})
 
-if (ACML_INCLUDE_DIRS)
-  set(ACML_FOUND TRUE)
-endif (ACML_INCLUDE_DIRS)
-
-if (ACML_FOUND)
-  if (NOT ACML_FIND_QUIETLY)
-	 message(STATUS "Found ACML: ${ACML_INCLUDE_DIRS}")
-  endif (NOT ACML_FIND_QUIETLY)
-else(ACML_FOUND)
-  if (ACML_FIND_REQUIRED)
-	 message(FATAL_ERROR "Could not find ACML")
-  endif (ACML_FIND_REQUIRED)
-endif (ACML_FOUND)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(ACML DEFAULT_MSG ACML_LIBRARIES ACML_INCLUDE_DIRS)

@@ -98,14 +98,14 @@ set(gurls_sources   src/gmath.cpp
                     src/optmatrix.cpp
     )
 
-set(Gurls++_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "")
+set(Gurls++_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${Gurls++_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${BLAS_LAPACK_INCLUDE_DIRS})
 add_definitions(${BLAS_LAPACK_DEFINITIONS})
 link_directories(${BLAS_LAPACK_LIBRARY_DIRS})
 
 set (GurlsDependencies_LIBRARIES ${BLAS_LAPACK_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} ${Boost_DATE_TIME_LIBRARY})
 
-add_library(${GURLSLIBRARY} ${GURLS_LIB_LINK} ${gurls_headers} ${gurls_sources} )
+add_library(${GURLSLIBRARY} ${gurls_headers} ${gurls_sources} )
 
 target_link_libraries(${GURLSLIBRARY} ${GurlsDependencies_LIBRARIES})
 
@@ -141,8 +141,8 @@ if(MSVC)
 
 endif(MSVC)
 
-set(Gurls++_LIBRARY ${GURLSLIBRARY} CACHE INTERNAL "")
-set(Gurls++_LIBRARIES ${GURLSLIBRARY} ${GurlsDependencies_LIBRARIES} ) #to compile test executables
+set(Gurls++_LIBRARY ${GURLSLIBRARY})
+set(Gurls++_LIBRARIES ${GURLSLIBRARY}) #to compile test executables
 
 option(GURLSPP_BUILD_DEMO "" ON)
 if(GURLSPP_BUILD_DEMO)

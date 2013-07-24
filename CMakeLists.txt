@@ -50,13 +50,11 @@ if(GURLS_BUILD_GURLSPP)
     endif()
 
     if(GURLS_BUILD_SHARED_LIBS)
-
-        set(GURLS_LIB_LINK SHARED)
+        set(BUILD_SHARED_LIBS ON)
         if(MSVC)
             set(export_definitions ${export_definitions} -D_GURLS_EXPORTS)
         endif()
     else(GURLS_BUILD_SHARED_LIBS)
-        set(GURLS_LIB_LINK STATIC)
         set(export_definitions ${export_definitions} -D_GURLS_STATIC)
     endif(GURLS_BUILD_SHARED_LIBS)
 

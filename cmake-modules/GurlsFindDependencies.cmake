@@ -2,12 +2,11 @@
 # Authors: Elena Ceseracciu <elena.ceseracciu@iit.it>, Matteo Santoro <msantoro@mit.edu>
 
 
-#Check if BLAS and LAPACK are already available on the system
+# Check if BLAS and LAPACK are already available on the system
 
 if(BLAS_LAPACK_IMPLEMENTATION STREQUAL "MKL")
 
     find_package(MKL)
-
     set(BLAS_LAPACK_INCLUDE_DIRS ${MKL_INCLUDE_DIRS})
     set(BLAS_LAPACK_LIBRARY_DIRS ${MKL_LIBRARY_DIRS})
     set(BLAS_LAPACK_DEFINITIONS ${MKL_DEFINITIONS})
@@ -46,7 +45,7 @@ elseif(BLAS_LAPACK_IMPLEMENTATION STREQUAL "OPENBLAS")
     set(BLAS_LAPACK_LIBRARIES ${Openblas_LIBRARIES})
     set(BLAS_LAPACK_FOUND ${Openblas_FOUND})
 
-else(BLAS_LAPACK_IMPLEMENTATION STREQUAL "MKL")
+else()
 # includes case "NETLIB"
 
     if(CMAKE_COMPILER_IS_GNUCC)
@@ -59,14 +58,9 @@ else(BLAS_LAPACK_IMPLEMENTATION STREQUAL "MKL")
     set(BLAS_LAPACK_LIBRARY_DIRS )
     set(BLAS_LAPACK_DEFINITIONS )
     set(BLAS_LAPACK_LIBRARIES ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
-    if(${BLAS_FOUND} AND ${LAPACK_FOUND})
-        set(BLAS_LAPACK_FOUND TRUE)
-    else()
-        set(BLAS_LAPACK_FOUND FALSE)
-    endif()
+    set(BLAS_LAPACK_FOUND (${BLAS_FOUND} AND ${LAPACK_FOUND}))
 
-
-endif(BLAS_LAPACK_IMPLEMENTATION STREQUAL "MKL")
+endif()
 
 if(NOT BLAS_LAPACK_FOUND)
     option(GURLS_USE_EXTERNAL_BLAS_LAPACK "build external project Openblas" OFF)
@@ -74,9 +68,15 @@ endif()
 
 if(GURLS_USE_EXTERNAL_BLAS_LAPACK)
     include(BuildOpenblas)
+    set(BLAS_LAPACK_INCLUDE_DIRS ${Openblas_INCLUDE_DIRS})
+    set(BLAS_LAPACK_LIBRARY_DIRS )
+    set(BLAS_LAPACK_DEFINITIONS )
+    set(BLAS_LAPACK_LIBRARIES ${Openblas_LIBRARIES})
+    set(BLAS_LAPACK_FOUND ${Openblas_FOUND})
 endif()
-#################### BOOST
 
+
+# Check if BOOST is already available on the system
 
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
@@ -86,9 +86,9 @@ option(Boost_USE_STATIC_LIBS "Link statically against boost libs" ON)
 find_package( Boost ${BOOST_MINIMUM_VERSION} COMPONENTS serialization date_time filesystem unit_test_framework system signals REQUIRED)
 mark_as_advanced(Boost_DIR)
 
-    if(MSVC)
-        add_definitions(-DBOOST_ALL_NO_LIB)
-    endif()
+if(MSVC)
+    add_definitions(-DBOOST_ALL_NO_LIB)
+endif()
 
 if(NOT Boost_FOUND)
     option(GURLS_USE_EXTERNAL_BOOST "build external project Boost" OFF)
@@ -108,4 +108,3 @@ endif()
 if(GURLS_USE_EXTERNAL_HDF5) #if GURLS_USE_EXTERNAL_HDF5 was enabled by the user...
     include(BuildHDF5)
 endif()
-
