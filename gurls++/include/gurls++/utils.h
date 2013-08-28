@@ -964,8 +964,8 @@ template<typename T>
 gMat2D<T>* rp_projections(const unsigned long d, const unsigned long D)
 {
 //    W = sqrt(2)*randn(d,D);
-    boost::random::mt19937 gen;
-    boost::random::normal_distribution<T> g(0.0, (T)sqrt(2.0));
+    boost::mt19937 gen;
+    boost::normal_distribution<T> g(0.0, (T)sqrt(2.0));
 
     gMat2D<T> *W = new gMat2D<T>(d, D);
     for(T* W_it = W->getData(), *const W_end = W_it + (d*D); W_it != W_end; ++W_it)
